@@ -1,0 +1,16 @@
+.container {
+  margin-top: 20px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.list li {
+  margin-bottom: 10px;
+}
+
+strong {
+  font-weight: bold;
+}

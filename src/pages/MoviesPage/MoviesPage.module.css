@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  & form {
+    margin-bottom: 20px;
+    margin-top: 15px;
+  }
+  & input {
+    padding: 8px;
+    margin-right: 15px;
+    border-radius: 6px;
+    width: 250px;
+  }
+  & button {
+    padding: 8px;
+    background-color: aliceblue;
+    border-radius: 8px;
+  }
+}
