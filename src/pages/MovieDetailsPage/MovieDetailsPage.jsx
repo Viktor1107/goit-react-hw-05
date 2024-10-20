@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Outlet, Link, useParams, useLocation } from "react-router-dom";
 import { fetchMoviesDetails } from "../../articles-api/articles-api.js";
 import s from "./MovieDetailsPage.module.css";
@@ -7,6 +7,7 @@ function MovieDetailsPage() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const location = useLocation();
+  const goBackRef = useRef(location.state ?? "/");
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -44,6 +45,7 @@ function MovieDetailsPage() {
           <li>
             <Link
               to={`/movies/${movieId}/cast`}
+              state={{ from: goBackRef.current }}
               className={location.pathname.includes("/cast")}
             >
               Cast

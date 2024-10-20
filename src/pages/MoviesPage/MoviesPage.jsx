@@ -1,33 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { fetchMoviesSearch } from "../../articles-api/articles-api.js";
 import MovieList from "../../components/MovieList/MovieList";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
+import NotFoundPage from "../NotFoundPage/NotFoundPage.jsx";
 import s from "./MoviesPage.module.css";
 
 function MoviesPage() {
   const [movies, setMovies] = useState([]);
-  const [query, setQuery] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleSearch = async (searchQuery = query) => {
-    try {
-      const data = await fetchMoviesSearch(searchQuery);
+  const query = searchParams.get("query") || "";
 
-      if (data.results.length === 0) {
-        navigate("/notfound");
-      } else {
-        setMovies(data.results);
-        navigate(`?query=${searchQuery}`);
-      }
-    } catch (error) {
-      console.error("Error fetching movies:", error);
+  useEffect(() => {
+    if (query) {
+      const fetchMovies = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const data = await fetchMoviesSearch(query);
+          if (data.results.length === 0) {
+            setError("No movies found.");
+            setMovies([]);
+          } else {
+            setMovies(data.results);
+          }
+        } catch (error) {
+          setError("Failed to fetch movies.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchMovies();
     }
-  };
+  }, [query]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (query.trim()) {
-      handleSearch();
+      setSearchParams({ query });
     }
   };
 
@@ -37,12 +49,14 @@ function MoviesPage() {
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => setSearchParams({ query: e.target.value })}
           placeholder="Search for movies..."
         />
         <button type="submit">Search</button>
       </form>
 
+      {loading && <p>Loading...</p>}
+      {error && <NotFoundPage />}
       {movies.length > 0 && <MovieList movies={movies} />}
     </div>
   );
