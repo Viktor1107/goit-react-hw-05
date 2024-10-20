@@ -4,7 +4,7 @@ import { fetchMoviesReviews } from "/src/articles-api/articles-api.js";
 import { useParams } from "react-router-dom";
 
 function MovieReviews() {
-  const { movieId } = useParams;
+  const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
