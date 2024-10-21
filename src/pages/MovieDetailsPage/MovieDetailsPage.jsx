@@ -7,7 +7,7 @@ function MovieDetailsPage() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const location = useLocation();
-  const goBackRef = useRef(location.state ?? "/");
+  const goBackRef = useRef(location.state?.from ?? "/");
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -26,6 +26,7 @@ function MovieDetailsPage() {
 
   return (
     <div className={s.container}>
+      <Link to={goBackRef.current}>Go back</Link>
       <img
         src={
           movie.poster_path
